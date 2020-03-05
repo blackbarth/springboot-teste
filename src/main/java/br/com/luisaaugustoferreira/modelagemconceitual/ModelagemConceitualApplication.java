@@ -13,6 +13,7 @@ import br.com.luisaaugustoferreira.modelagemconceitual.domain.Cidade;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Cliente;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Endereco;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Estado;
+import br.com.luisaaugustoferreira.modelagemconceitual.domain.ItemPedido;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Pagamento;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.PagamentoComBoleto;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import br.com.luisaaugustoferreira.modelagemconceitual.repositories.CidadeReposi
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.ClienteRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.EnderecoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.EstadoRepository;
+import br.com.luisaaugustoferreira.modelagemconceitual.repositories.ItemPedidoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.PagamentoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.PedidoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ModelagemConceitualApplication.class, args);
@@ -100,7 +105,6 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		Pedido ped1 = new Pedido(null, sdf.parse("30/07/2017 10:32"), cli1, e1);
 		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 09:35"), cli1, e2);
@@ -114,9 +118,20 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 
-
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		
+
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }

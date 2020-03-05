@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Categoria;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Cidade;
+import br.com.luisaaugustoferreira.modelagemconceitual.domain.Cliente;
+import br.com.luisaaugustoferreira.modelagemconceitual.domain.Endereco;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Estado;
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.Produto;
+import br.com.luisaaugustoferreira.modelagemconceitual.domain.enums.TipoCliente;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.CategoriaRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.CidadeRepository;
+import br.com.luisaaugustoferreira.modelagemconceitual.repositories.ClienteRepository;
+import br.com.luisaaugustoferreira.modelagemconceitual.repositories.EnderecoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.EstadoRepository;
 import br.com.luisaaugustoferreira.modelagemconceitual.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ModelagemConceitualApplication.class, args);
@@ -61,11 +72,18 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("985858948", "985784587"));
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apt 303", "Jardim", "13185012", cli1, c1);
+		Endereco e2 = new Endereco(null, "Rua Flores 2", "301", "Apt 304", "Jardim", "13185013", cli1, c2);
+
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
 	}
 

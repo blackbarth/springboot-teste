@@ -1,8 +1,13 @@
 package br.com.luisaaugustoferreira.modelagemconceitual.domain;
 
+import javax.persistence.Entity;
+
 import br.com.luisaaugustoferreira.modelagemconceitual.domain.enums.EstadoPagamento;
 
+@Entity
 public class PagamentoComCartao extends Pagamento {
+
+	private static final long serialVersionUID = 1L;
 	private Integer numeroDeParcelas;
 	
 
